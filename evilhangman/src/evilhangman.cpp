@@ -8,8 +8,8 @@
 using namespace std;
 
 const string ALPHABET  = "abcdefghijklmnopqrstuvwxyz";
-//const string dictFilePath = "/Users/Daniel/Documents/Programmering/TDDD86/Lab2/evilhangman/res/dictionary.txt";
-const string dictFilePath = "dictionary.txt";
+const string dictFilePath = "/Users/Daniel/Documents/Programmering/TDDD86/Lab2/evilhangman/res/dictionary.txt";
+//const string dictFilePath = "dictionary.txt";
 
 const string ANSWER_YES = "yes";
 const string ANSWER_NO = "no";
@@ -31,6 +31,7 @@ map<int, vector<string> > loadDictionary() {
     return dictMap;
 }
 
+//kopia??
 pair<string,vector<string> > divideWordFamilies(char guessedLetter,int wordLength, string wordToGuess, vector<string>& words){
     map<string, vector<string> > families;
     int occurences = -1;
@@ -57,6 +58,11 @@ pair<string,vector<string> > divideWordFamilies(char guessedLetter,int wordLengt
             }
         }
         families[keyString].push_back(word);
+    }
+
+    if(noOfGuessed == 1 && families[wordToGuess].size() > 0){
+        pair<string, vector<string> > returnedPair (wordToGuess, families[wordToGuess]);
+        return returnedPair;
     }
 
 
