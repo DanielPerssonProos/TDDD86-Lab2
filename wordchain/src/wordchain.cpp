@@ -9,7 +9,7 @@ using namespace std;
 
 const string ALPHABET  = "abcdefghijklmnopqrstuvwxyz";
 
-
+/* Loads the dictionary from file */
 void loadDictionary(set<string>& dictionary) {
     string word;
     ifstream stream;
@@ -23,9 +23,9 @@ void loadDictionary(set<string>& dictionary) {
     }
 }
 
-vector<string> findClosestNeighbors(string& originalWord, set<string>& dictionary, set<string>& alreadyFoundWords) {
+/* This function finds all neighbors of a word, only changing one letter and then checks if its in the dictionary  */
+void findClosestNeighbors(vector<string>& foundNeighbors,string& originalWord, set<string>& dictionary, set<string>& alreadyFoundWords) {
     string word;
-    vector<string> foundNeighbors;
     for (unsigned long int i = 0; i < originalWord.length(); ++i) {
         word = originalWord;
         for (string::const_iterator letter = ALPHABET.begin(); letter != ALPHABET.end(); ++letter) {
@@ -36,10 +36,10 @@ vector<string> findClosestNeighbors(string& originalWord, set<string>& dictionar
             }
         }
     }
-    return foundNeighbors;
 }
 
-void wordChain(string& firstWord, string& secondWord, set<string>& dictionary) {
+/* This function finds the closest path from firstWord to secondWord using a dictionary */
+void wordChain(string firstWord, string secondWord, set<string>& dictionary) {
     queue<stack<string>> chainQueue;
     stack<string> firstStack;
     set<string> alreadyFoundWords;
@@ -57,7 +57,9 @@ void wordChain(string& firstWord, string& secondWord, set<string>& dictionary) {
             cout << endl;
             return;
         } else {
-            vector<string> neighbors = findClosestNeighbors(stackToCheck.top(), dictionary, alreadyFoundWords);
+            vector<string> neighbors;
+            findClosestNeighbors(neighbors,stackToCheck.top(), dictionary, alreadyFoundWords);
+
             for (string neighbor : neighbors) {
                 stack<string> newStack (stackToCheck);
                 newStack.push(neighbor);
@@ -82,13 +84,11 @@ int main() {
     string firstWord, secondWord;
     cin >> firstWord >> secondWord;
 
-    while (firstWord != "exit") {
+    while(true){
         wordChain(firstWord, secondWord, dictionary);
         cout << "Please type two words: ";
         cin >> firstWord >> secondWord;
     }
-
-    // TODO: Finish the program!
 
     return 0;
 }
