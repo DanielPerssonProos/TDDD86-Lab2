@@ -26,7 +26,7 @@ void loadDictionary(map<int, vector<string> >& dictMap) {
 
     while (!stream.eof()) {
         stream >> word;
-        dictMap[word.length()].push_back(word);
+        dictMap[word.length()].push_b535ack(word);
     }
 
 }
