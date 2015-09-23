@@ -14,8 +14,8 @@ const string dictFilePath = "dictionary.txt";
 const string ANSWER_YES = "yes";
 const string ANSWER_NO = "no";
 
-map<int, vector<string> > loadDictionary() {
-    map<int, vector<string> > dictMap;
+void loadDictionary(map<int, vector<string> >& dictMap) {
+
     ifstream stream;
     string word;
     stream.open(dictFilePath);
@@ -28,13 +28,14 @@ map<int, vector<string> > loadDictionary() {
         stream >> word;
         dictMap[word.length()].push_back(word);
     }
-    return dictMap;
+
 }
 
-//kopia??
+
 pair<string,vector<string> > divideWordFamilies(char guessedLetter,int nmGuesses,int wordLength, string wordToGuess, vector<string>& words){
     map<string, vector<string> > families;
     int occurences = -1;
+
 
     for(string word : words){
         string keyString = wordToGuess;
@@ -65,7 +66,6 @@ pair<string,vector<string> > divideWordFamilies(char guessedLetter,int nmGuesses
         pair<string, vector<string> > returnedPair (wordToGuess, families[wordToGuess]);
         return returnedPair;
     }
-
 
     unsigned int sizeOfBiggest = 0;
     pair<string, vector<string> > biggestFamily;
@@ -121,8 +121,6 @@ void runGame(bool& showWordCount, int& nmGuesses, int wordLength, vector<string>
             gameEnded = true;
         }else{
             cout << endl << endl << wordToGuess << endl << endl;
-
-
         }
     }
 }
@@ -132,7 +130,8 @@ int main() {
     cout << "Welcome to Hangman." << endl;
 
     bool playAgain = true;
-    map<int, vector<string> > dictMap = loadDictionary();
+    map<int, vector<string> > dictMap;
+    loadDictionary(dictMap);
 
     while(playAgain){
 
