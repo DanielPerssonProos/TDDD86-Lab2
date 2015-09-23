@@ -13,7 +13,7 @@ const string ALPHABET  = "abcdefghijklmnopqrstuvwxyz";
 void loadDictionary(set<string>& dictionary) {
     string word;
     ifstream stream;
-    stream.open("/Users/Daniel/Documents/Programmering/TDDD86/Lab2/wordchain/res/dictionary.txt");
+    stream.open("dictionary.txt");
     if (!stream.is_open()) {
         cout << "Could not load dictionary." << endl;
     }
