@@ -26,14 +26,42 @@ void loadDictionary(map<int, vector<string> >& dictMap) {
 
     while (!stream.eof()) {
         stream >> word;
-        dictMap[word.length()].push_b535ack(word);
+        dictMap[word.length()].push_back(word);
     }
 
 }
 
+const string valueOneLetters = "aeiot";
+const string valueTwoLetters = "hnrs";
+const string valueThreeLetters = "dl";
+const string valueFourLetters = "cmpuwfgy";
+const string valueSixLetters = "bkv";
+const string valueEightLetters = "jqxz";
+
+int calculateWordValue(string word){
+    unsigned int wordValue = 0;
+    for(char letter : word){
+
+        if(valueOneLetters.find(letter) != string::npos){
+            wordValue+= 1;
+        } else if(valueTwoLetters.find(letter) != string::npos){
+            wordValue+= 2;
+        } else if(valueThreeLetters.find(letter) != string::npos){
+            wordValue+= 3;
+        } else if(valueFourLetters.find(letter) != string::npos){
+            wordValue+= 4;
+        } else if(valueSixLetters.find(letter) != string::npos){
+            wordValue+= 6;
+        } else{
+            wordValue+= 5000;
+        }
+    }
+    return wordValue;
+
+}
 
 pair<string,vector<string> > divideWordFamilies(char guessedLetter,int nmGuesses,int wordLength, string wordToGuess, vector<string>& words){
-    map<string, vector<string> > families;
+    map<string, pair<int,vector<string> > > families;
     int occurences = -1;
 
 
@@ -58,28 +86,34 @@ pair<string,vector<string> > divideWordFamilies(char guessedLetter,int nmGuesses
                 }
             }
         }
-        families[keyString].push_back(word);
+
+        families[keyString].first += calculateWordValue(word);
+        families[keyString].second.push_back(word);
     }
 
 
-    if(nmGuesses == 1 && families[wordToGuess].size() > 0){
-        pair<string, vector<string> > returnedPair (wordToGuess, families[wordToGuess]);
+    if(nmGuesses == 1 && families[wordToGuess].second.size() > 0){
+        pair<string, vector<string> > returnedPair (wordToGuess, families[wordToGuess].second);
         return returnedPair;
     }
 
     unsigned int sizeOfBiggest = 0;
-    pair<string, vector<string> > biggestFamily;
+    pair<string,vector<string> > biggestFamily;
+
 
     for(auto iterator = families.begin(); iterator != families.end(); ++iterator){
-        if((*iterator).second.size() > sizeOfBiggest){
-            sizeOfBiggest = (*iterator).second.size();
-            biggestFamily = *iterator;
+        if((*iterator).second.first > sizeOfBiggest){
+            sizeOfBiggest = (*iterator).second.first;
+            biggestFamily.first = (*iterator).first;
+            biggestFamily.second = (*iterator).second.second;
         }
     }
-    return biggestFamily;
+    return biggestFamily; //by reference instead
 }
 
-void runGame(bool& showWordCount, int& nmGuesses, int wordLength, vector<string>& words) {
+
+
+void runGame(bool& showWordCount, int& nmGuesses, int wordLength, vector<string> words) {
     string prevGuessedLetters = "";
     string wordToGuess = string(wordLength, '-');
     char guessedLetter;
